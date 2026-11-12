@@ -1,26 +1,17 @@
-import React from "react";
 import { Container } from "./style";
 
 import IncomeImg from "../../assets/Entradas.svg";
 import OutcomeImg from "../../assets/Saidas.svg";
 import TotalImg from "../../assets/Total.svg";
 import { useTransactions } from "../../hooks/useTransactionContext";
+import { summarize } from "../../services/transaction-store";
 
 export function Summary() {
   const {transactions} = useTransactions()
 
  
 
-  const summary = transactions.reduce((acc, transaction)=>{
-    if (transaction.type === 'deposit') {
-      acc.deposits += transaction.amount;
-      acc.total += transaction.amount;
-    } else {
-      acc.withdraws += transaction.amount
-      acc.total -= transaction.amount;
-    }
-    return acc
-  }, {deposits: 0, withdraws: 0, total: 0})
+  const summary = summarize(transactions)
   return (
     <Container>
       <div>

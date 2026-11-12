@@ -14,15 +14,21 @@ interface TransactionModalProps {
 
 
 export  function NewTransactionModal({onNewTransactionModalClosed, isNewTransactionModalOpen}: TransactionModalProps) {
-  const [type, setType] =  React.useState('deposit')
+  const [type, setType] =  React.useState<'deposit' | 'withdraw'>('deposit')
   const [title, setTitle] = React.useState("")
   const [amount, setAmount] = React.useState(0)
   const [category, setCategory] = React.useState("")
   const {createTransaction} = useTransactions()
+  const [error, setError] = React.useState('')
  async function handleCreateNewTransaction(event:  FormEvent ) {
     event.preventDefault()
-    await createTransaction({title, amount, type, category })
-
+    try {
+      await createTransaction({ title, amount, type, category })
+      setError('')
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Não foi possível salvar a transação.')
+      return
+    }
     setTitle('')
     setAmount(0)
     setCategory('')
@@ -44,10 +50,11 @@ export  function NewTransactionModal({onNewTransactionModalClosed, isNewTransact
            />
          </button> 
          <Container onSubmit={handleCreateNewTransaction} method="post">
-           <h2>New Transaction</h2>
+           <h2>Nova transação de exemplo</h2>
+           {error && <p role="alert" style={{color:'#c5003c',marginBottom:'12px'}}>{error}</p>}
 
-           <input type="text" placeholder="Tittle" value={title} onChange={event => setTitle(event.target.value)}/>
-           <input type="number" placeholder="Number" value={amount} onChange={event => setAmount(Number(event.target.value))} />
+           <input type="text" aria-label="Título da transação" required maxLength={100} placeholder="Título" value={title} onChange={event => setTitle(event.target.value)}/>
+           <input type="number" aria-label="Valor da transação em reais" min="0.01" step="0.01" required placeholder="Valor em reais" value={amount} onChange={event => setAmount(Number(event.target.value))} />
 
             <TransactionTypeContainer>
               <RadioBox type="button" 
@@ -69,9 +76,9 @@ export  function NewTransactionModal({onNewTransactionModalClosed, isNewTransact
               </RadioBox>
             </TransactionTypeContainer>
 
-           <input placeholder="categoria" value={category} onChange={event => setCategory(event.target.value)}/>
+           <input aria-label="Categoria da transação" required maxLength={60} placeholder="Categoria" value={category} onChange={event => setCategory(event.target.value)}/>
 
-           <button type="submit">Add</button>
+           <button type="submit">Adicionar transação</button>
 
          </Container>
         
