@@ -6,9 +6,15 @@ export const Container = styled.div`
   gap: 2rem;
   margin-top: -5rem;
 
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: -6rem;
+  }
+
   div {
     background: var(--shape);
-    padding: 1.5px 2rem;
+    padding: 1.5rem 2rem;
     border-radius: 0.25rem;
     color: var(--text-tittle);
 
