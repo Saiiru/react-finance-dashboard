@@ -1,3 +1,15 @@
+# Finance Dashboard — React
+
+**Objetivo:** Estudar o desenho de uma interface para registrar entradas e saídas e acompanhar resumos financeiros.
+
+**Estado:** Projeto de estudo React; testes não localizados no branch principal. Não é sistema bancário.
+
+**Documentação técnica, origem e próximos passos:** [docs/PROJECT_BRIEF.md](docs/PROJECT_BRIEF.md)
+
+---
+
+## Material original preservado
+
 ### DTMONEY
 
 <p>
