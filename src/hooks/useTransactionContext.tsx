@@ -1,55 +1,46 @@
-import React, { ReactNode } from 'react';
-import { api } from '../services/api';
+import React, { ReactNode } from 'react'
+import {
+  STORAGE_KEY, Transaction, TransactionInput, addTransaction, readTransactions
+} from '../services/transaction-store'
 
-
-
-interface Transaction {
-  id: number,
-  title: string,
-  amount: number,
-  type: string,
-  category: string,
-  createdAt: string
+interface TransactionsProviderProps { children: ReactNode }
+interface TransactionContextData {
+  transactions: Transaction[]
+  createTransaction: (input: TransactionInput) => Promise<void>
+  resetTransactions: () => void
+  isLocal: true
 }
+export const transactionContext = React.createContext<TransactionContextData>({} as TransactionContextData)
 
-interface TransactionsProviderProps {
-  children: ReactNode;
+function initialTransactions() {
+  return readTransactions({
+    getItem: key => {
+      try { return window.localStorage.getItem(key) } catch { return null }
+    }
+  })
 }
-
-type TransactionInput = Omit<Transaction, 'id' | 'createdAt'>
-
-interface TranasctionContextData {
-  transactions: Transaction[],
-  createTransaction: (transaction: TransactionInput) => Promise<void>
-}
-
-export const transactionContext = React.createContext<TranasctionContextData>({} as TranasctionContextData)
-
-
-export function TransactionProvider({children}: TransactionsProviderProps) {
-  const [ transactions, setTransactions] = React.useState<Transaction[]>([])
-  React.useEffect(() => {
-    api.get("transactions")
-      .then((response) => setTransactions(response.data.transactions));
-  }, []);
-
-
-  async function createTransaction(transactionInput: TransactionInput){
-    
-  const response = await api.post('/transactions', {...transactionInput, createdAt: new Date()})
-  const {transaction} = response.data;
-
-  setTransactions([...transactions, transaction])
+function persist(transactions: Transaction[]) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions))
+  } catch {
+    // Storage may be disabled in private browsing; the in-memory demo still works.
   }
-return (
-  <transactionContext.Provider value={{transactions, createTransaction}}>
+}
+
+export function TransactionProvider({ children }: TransactionsProviderProps) {
+  const [transactions, setTransactions] = React.useState<Transaction[]>(initialTransactions)
+
+  async function createTransaction(input: TransactionInput) {
+    const updated = addTransaction(transactions, input, window.crypto.randomUUID(), new Date().toISOString())
+    setTransactions(updated)
+    persist(updated)
+  }
+  function resetTransactions() {
+    try { window.localStorage.removeItem(STORAGE_KEY) } catch { /* local state still resets */ }
+    setTransactions(initialTransactions())
+  }
+  return <transactionContext.Provider value={{ transactions, createTransaction, resetTransactions, isLocal: true }}>
     {children}
   </transactionContext.Provider>
-)
 }
-
-export function useTransactions(){
-  const context = React.useContext(transactionContext)
-
-  return context
-}
+export function useTransactions() { return React.useContext(transactionContext) }

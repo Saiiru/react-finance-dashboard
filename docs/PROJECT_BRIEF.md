@@ -35,3 +35,14 @@ Exercício baseado no Ignite da Rocketseat. Créditos, fontes de tutoriais e col
 **Ainda não é:** sistema integrado à KORA, serviço em produção ou prova de maturidade sem testes.
 
 [Voltar ao portfólio SAIRU/BLACKSITE](https://saiiru.github.io/#projetos-independentes)
+
+
+## Verificação de funcionamento — 12/11/2026
+
+**Estado confirmado:** Demo React local funcional
+
+**Evidência:** Node 24 · npm test: 5/5; Vite build; tsc --noEmit; Playwright 390/1280 e recarga mantendo registro
+
+**Limites e bloqueios:** Sem backend bancário; dados fictícios apenas no navegador; demonstração estática Vercel.
+
+Esta validação não implica integração à KORA nem certificação de produção. Não alterar histórico, licença e autoria dos tutoriais.

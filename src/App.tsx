@@ -23,6 +23,7 @@ function App() {
   return (
     <TransactionProvider>
       <Header  onOpenNewTransactionModal={handleOpenNewTransactionModal}/>
+      <p role="status" className="demo-notice">DEMONSTRATIVO LOCAL · Dados fictícios armazenados apenas neste navegador. Sem conexão bancária.</p>
       <Dashboard />
 
       <NewTransactionModal onNewTransactionModalClosed={handleCloseNewTransactionModal} isNewTransactionModalOpen={isNewTransactionModalOpen}/>

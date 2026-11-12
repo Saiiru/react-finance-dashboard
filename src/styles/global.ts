@@ -91,5 +91,7 @@ export const GlobalStyle = createGlobalStyle`
             filter: brightness(0.7)
         }
     }
+
+    .demo-notice { margin:12px auto; max-width:1120px; padding:10px 18px; font-size:.82rem; color:#363f5f; background:#dce7f2; border-left:4px solid #5429cc; line-height:1.55; }
 `
 

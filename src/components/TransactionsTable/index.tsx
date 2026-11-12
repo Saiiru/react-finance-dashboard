@@ -6,7 +6,6 @@ import { Container } from "./style";
 export function TransactionTable() {
   const {transactions} = useTransactions()
 
-  console.log(transactions)
   return (
     <Container>
       <table>
@@ -19,6 +18,7 @@ export function TransactionTable() {
           </tr>
         </thead>
         <tbody>
+          {transactions.length === 0 && <tr><td colSpan={4}>Ainda não há transações neste demonstrativo.</td></tr>}
           {transactions.map(transaction=>(
               <tr key={transaction.id}>
               <td>{transaction.title}</td>
