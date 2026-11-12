@@ -7,7 +7,7 @@ export function TransactionTable() {
   const {transactions} = useTransactions()
 
   return (
-    <Container>
+    <Container tabIndex={0} role="region" aria-label="Tabela de transações (rolagem horizontal em telas pequenas)">
       <table>
         <thead>
           <tr>
